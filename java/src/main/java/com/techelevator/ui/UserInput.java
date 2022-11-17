@@ -25,7 +25,7 @@ public class UserInput
         System.out.print("Please select an option: ");
 
         String selectedOption = scanner.nextLine();
-        String option = selectedOption.trim().toLowerCase();
+        String option = selectedOption.trim();
 
         if (option.equals("D"))
         {
@@ -46,5 +46,19 @@ public class UserInput
 
     }
 
+    public static String getPurchaseMenuOptions() {
+        System.out.println("Please choose from the following options");
+        String choice = scanner.nextLine();
+
+        if(choice.equals("M")) {
+            return "Money Accepted";
+        } else if(choice.equals("S")) {
+            return "Item Selected";
+        } else if(choice.equals("F")) {
+            return "Finish";
+        } else {
+            return "";
+        }
+    }
     
 }

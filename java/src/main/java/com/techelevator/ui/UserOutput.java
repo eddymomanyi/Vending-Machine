@@ -29,4 +29,10 @@ public class UserOutput
         System.out.println();
     }
 
+    public static void displayPurchaseMenuOptions() {
+        System.out.println("Type (M) to insert money");
+        System.out.println("Type (S) to select item");
+        System.out.println("Type (F) to finish transaction");
+}
+
 }

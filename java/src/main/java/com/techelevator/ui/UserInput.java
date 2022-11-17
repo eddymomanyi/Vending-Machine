@@ -53,7 +53,7 @@ public class UserInput
         if(choice.equals("M")) {
             return "Money Accepted";
         } else if(choice.equals("S")) {
-            return "Item Selected";
+            return "Select Item";
         } else if(choice.equals("F")) {
             return "Finish";
         } else {

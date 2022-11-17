@@ -1,7 +1,7 @@
 package com.techelevator.ui;
 
-import java.math.BigDecimal;
-import java.util.Map;
+import com.techelevator.application.VendingMachine;
+import com.techelevator.models.Item;
 
 
 /**
@@ -35,4 +35,9 @@ public class UserOutput
         System.out.println("Type (F) to finish transaction");
 }
 
+    public static void displayStock(){
+        for (Item item : VendingMachine.getStockItems()) {
+            System.out.println(item);
+        }
+    }
 }

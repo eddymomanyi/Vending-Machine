@@ -47,9 +47,16 @@ public abstract class Item {
 
     public abstract String getMessage();
 
-    public double purchase(double totalCash){
+    public double purchase(double totalCash, int purchaseCounter){
+
         setStockQty(stockQty - 1);
-        return totalCash-price;
+        double remainingCash = totalCash-price;
+
+        if (purchaseCounter % 2 == 0) {
+            remainingCash = remainingCash + 1;
+            return remainingCash;
+        }
+        return remainingCash;
     }
 
 }

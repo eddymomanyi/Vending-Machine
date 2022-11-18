@@ -27,7 +27,7 @@ public class VendingMachine {
     private static int purchaseCounter;
 
     public void loadFile() {
-        File file = new File("catering.csv");
+        File file = new File("catering1.csv");
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNext()) {
@@ -79,7 +79,7 @@ public class VendingMachine {
                 purchaseMenu();
 
             } else if (choice.equals("exit")) {
-                // good bye
+                UserOutput.displayMessage("Goodbye");
                 break;
             }
         }
@@ -154,13 +154,24 @@ public class VendingMachine {
 
 
             } else if (choice.equals("Finish")) {
-
+                System.out.println(change(totalCash));
+                totalCash = 0;
+                break;
             }
 
         }
 
     } public static String change (double finalChange) {
+        double change = finalChange * 100;
+        int dollars = (int)(change/100);
+        change = change %100;
+        int quarters = (int)(change / 25);
+        change = change %25;
+        int dimes = (int)(change /10);
+        change = change %10;
+        int nickels = (int)(change / 5);
 
+        return "Your change is " + dollars + " dollars, " + quarters +" quarters, " + dimes + " dimes, and " + nickels + " nickels.";
 
 
     }

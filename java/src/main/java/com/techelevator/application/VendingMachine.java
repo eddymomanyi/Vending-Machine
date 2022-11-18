@@ -26,6 +26,8 @@ public class VendingMachine {
 
     private static int purchaseCounter;
 
+    private static Logger logger = new Logger( "audit.txt");
+
     public void loadFile() {
         File file = new File("catering1.csv");
         try {
@@ -104,8 +106,9 @@ public class VendingMachine {
 
                     if (cash == (int) cash) {
                         totalCash += cash;
-
+                        logger.write("MONEY FED: " + "$" + cash + " " + "CURRENT BALANCE " + "$" + totalCash);
                         System.out.println("Your current cash is: " + totalCash);
+
                     } else {
                         System.out.println("Please insert a valid whole dollar amount");
                         continue;
@@ -137,8 +140,10 @@ public class VendingMachine {
                                 remainingCash = remainingCash + 1;
                             }
                             purchaseCounter++;
+                            logger.write(stockItems.get(i).getItemName() + " " + itemSelected + " " + "CURRENT BALANCE: " + "$" + totalCash + " " + "REMAINING BALANCE: " + "$" + remainingCash);
                             totalCash = remainingCash;
                             System.out.println(stockQty);
+
                             System.out.println("You now have " + totalCash);
                         } else if (itemSelected.equals(stockLocation) && stockQty == 0) {
                             System.out.println("Your selected item is no longer available");
@@ -171,8 +176,11 @@ public class VendingMachine {
         change = change %10;
         int nickels = (int)(change / 5);
 
-        return "Your change is " + dollars + " dollars, " + quarters +" quarters, " + dimes + " dimes, and " + nickels + " nickels.";
+        double backToZero = 0;
 
+        logger.write("CHANGE GIVEN: " + "$" + finalChange + " " + "$" + backToZero);
+
+        return "Your change is " + dollars + " dollars, " + quarters +" quarters, " + dimes + " dimes, and " + nickels + " nickels.";
 
     }
 }

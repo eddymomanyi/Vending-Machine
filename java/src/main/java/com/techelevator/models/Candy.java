@@ -6,8 +6,6 @@ public class Candy extends Item{
         super(location, itemName, price, itemType);
     }
 
-    public String getMessage(){
-        return "Sugar, Sugar, so Sweet!";
-    }
+    public String getMessage(){return "Sugar, Sugar, so Sweet!";}
 
 }

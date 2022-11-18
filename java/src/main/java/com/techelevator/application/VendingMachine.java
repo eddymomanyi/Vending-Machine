@@ -6,6 +6,7 @@ import com.techelevator.ui.UserOutput;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +23,8 @@ public class VendingMachine {
     private static List<String> itemLocations = new ArrayList<>();
 
     private static double totalCash = 0.0;
+
+    private static int purchaseCounter;
 
     public void loadFile() {
         File file = new File("catering.csv");
@@ -62,6 +65,7 @@ public class VendingMachine {
 
     public void run() {
         loadFile();
+        purchaseCounter = 1;
 
         while (true) {
             UserOutput.displayHomeScreen();
@@ -73,7 +77,7 @@ public class VendingMachine {
                 }
             } else if (choice.equals("purchase")) {
                 purchaseMenu();
-                // make a purchase
+
             } else if (choice.equals("exit")) {
                 // good bye
                 break;
@@ -124,16 +128,24 @@ public class VendingMachine {
                     for (int i = 0; i < stockItems.size(); i++) {
                         String stockLocation = stockItems.get(i).getLocation();
                         int stockQty = stockItems.get(i).getStockQty();
-                        if (itemSelected.equals(stockLocation) && stockQty > 0) {
+                        if (itemSelected.equals(stockLocation) && stockQty > 0 && totalCash >= stockItems.get(i).getPrice()) {
                             System.out.println("Thanks for choosing " + stockItems.get(i).getItemName());
-                            stockItems.get(i).getMessage();
+                            System.out.println(stockItems.get(i).getMessage());
                             double remainingCash = stockItems.get(i).purchase(totalCash);
                             stockQty = stockItems.get(i).getStockQty();
+                            if(purchaseCounter % 2 == 0) {
+                                remainingCash = remainingCash + 1;
+                            }
+                            purchaseCounter++;
                             totalCash = remainingCash;
                             System.out.println(stockQty);
                             System.out.println("You now have " + totalCash);
                         } else if (itemSelected.equals(stockLocation) && stockQty == 0) {
                             System.out.println("Your selected item is no longer available");
+                            break;
+                        } else if (totalCash < stockItems.get(i).getPrice()) {
+                            System.out.println("Sorry, you need to insert cash first!");
+                            System.out.println();
                             break;
                         }
 
@@ -141,29 +153,15 @@ public class VendingMachine {
                 }
 
 
-            }
-//                for(int i = 0; i < stockItems.size(); i++){
-//                    String stockLocation = stockItems.get(i).getLocation();
-////                    String itemSelectedLC= itemSelected.toLowerCase();
-////                    String getItemNameLC = stockItems.get(i).getItemName();
-//                    if (itemSelected.equals(stockLocation)){
-//                        System.out.println(stockLocation);
-//
-//
-//                    }else if(!itemSelected.equals(stockLocation) ){
-//                        System.out.println(stockLocation);
-//                        System.out.println("Sorry, that item does not exist");
-//                        System.out.println("Please enter a valid slot");
-//                        System.out.println();
-//
-//                    }else if(stockItems.get(i).getStockQty() == 0){
-//                        System.out.println("Sorry, item is no longer available");
-//                        System.out.println();
-//                        break;
-//                    }
+            } else if (choice.equals("Finish")) {
 
+            }
 
         }
+
+    } public static String change (double finalChange) {
+
+
 
     }
 }

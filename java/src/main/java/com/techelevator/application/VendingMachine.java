@@ -74,9 +74,7 @@ public class VendingMachine {
             String choice = UserInput.getHomeScreenOption();
 
             if (choice.equals("display")) {
-                for (Item item : stockItems) {
-                    System.out.println(item);
-                }
+                UserOutput.displayStock();
             } else if (choice.equals("purchase")) {
                 purchaseMenu();
 
@@ -106,6 +104,10 @@ public class VendingMachine {
                     UserOutput.displayMessage("Please insert cash");
                     try {
                         double cash = Double.parseDouble(userInputScan.nextLine());
+                        if(cash == 0) {
+                            waitForMoney = false;
+                        }
+
                         if (cash == (int) cash && (cash == 1.0 || cash == 5.0 || cash == 10.0 || cash == 20.0)) {
                             totalCash += cash;
                             logger.write("MONEY FED: " + "$" + cash + " " + "CURRENT BALANCE " + "$" + totalCash);
@@ -120,12 +122,15 @@ public class VendingMachine {
                         continue;
                     }
                     UserOutput.displayMessage("Are you finished inserting money? (Y/N)");
+                    boolean waitForYesOrNo = true;
+
+
                     String yesOrNo = userInputScan.nextLine().toUpperCase();
                     if (yesOrNo.equals("Y")) {
                         UserOutput.displayMessage("Your total cash is: " + totalCash);
                         waitForMoney = false;
                     } else if (!yesOrNo.equals("N")) {
-                        UserOutput.displayMessage("Please select Y or N");
+                        UserOutput.displayMessage("Sorry, incorrect response!");
                     }
 
 
@@ -190,7 +195,7 @@ public class VendingMachine {
 
         logger.write("CHANGE GIVEN: " + "$" + finalChange + " " + "$" + backToZero);
 
-        return "Your change is " + dollars + " dollars, " + quarters + " quarters, " + dimes + " dimes, and " + nickels + " nickels.";
+        return "Your change is " + dollars + " dollar(s), " + quarters + " quarter(s), " + dimes + " dime(s), and " + nickels + " nickel(s).";
 
     }
 }

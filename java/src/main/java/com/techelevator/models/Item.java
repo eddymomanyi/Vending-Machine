@@ -47,13 +47,16 @@ public abstract class Item {
 
     public abstract String getMessage();
 
+    // conducts purchase transaction
     public double purchase(double totalCash, int purchaseCounter){
 
         setStockQty(stockQty - 1);
         double remainingCash = totalCash-price;
 
+        // bogodo discount
         if (purchaseCounter % 2 == 0) {
             remainingCash = remainingCash + 1;
+            // returns updated balance
             return remainingCash;
         }
         return remainingCash;

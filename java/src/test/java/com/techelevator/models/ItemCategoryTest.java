@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ItemCategoryTest {
 
+    // checks if category message is sent when user purchases item
 
     @Test
 

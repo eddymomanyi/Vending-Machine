@@ -51,7 +51,7 @@ public class UserInput
         String choice = scanner.nextLine().toUpperCase();
 
         if(choice.equals("M")) {
-            return "Money Accepted";
+            return "Insert Money";
         } else if(choice.equals("S")) {
             return "Select Item";
         } else if(choice.equals("F")) {

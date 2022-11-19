@@ -37,7 +37,7 @@ public class VendingMachine {
                 String line = scanner.nextLine();
                 String[] lineArr = line.split("\\,");
                 String itemCategory = lineArr[3];
-                itemLocations.add(lineArr[0]);
+                itemLocations.add(lineArr[0]); //adds each item location to a list
 
                 if (itemCategory.equals("Munchy")) {
                     item = new Munchy(lineArr[0], (lineArr[1]), Double.parseDouble(lineArr[2]), lineArr[3]);

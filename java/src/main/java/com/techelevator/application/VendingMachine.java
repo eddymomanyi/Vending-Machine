@@ -14,18 +14,19 @@ import java.util.List;
 import java.util.Scanner;
 
 public class VendingMachine {
+    //List to hold all items in the vending machine
     private static List<Item> stockItems = new ArrayList<>();
-
+    private static Funds funds = new Funds();
     private static Scanner userInputScan = new Scanner(System.in);
-
+    //Creates reference for Item class which will contain a single Candy/Munchy/Drinky/Gum object
     private static Item item;
-
+    //List containing all item locations (i.e. A1, B1, C1)
     private static List<String> itemLocations = new ArrayList<>();
-
+    //Keeps track of total Balance
     private static double totalCash = 0.0;
-
+    //Tracks the amount of purchases for the BOGODO  discount
     private static int purchaseCounter;
-
+    //Creating logger object to write to audit file
     private static Logger logger = new Logger("audit.txt");
 
     public void loadFile() {
@@ -96,44 +97,35 @@ public class VendingMachine {
             String choice = UserInput.getPurchaseMenuOptions();
 
             if (choice.equals("Money Accepted")) {
-
                 boolean waitForMoney = true;
-
-
                 while (waitForMoney) {
                     UserOutput.displayMessage("Please insert cash");
                     try {
                         double cash = Double.parseDouble(userInputScan.nextLine());
-                        if(cash == 0) {
+                        if (cash == 0) {
                             waitForMoney = false;
                         }
-
-                        if (cash == (int) cash && (cash == 1.0 || cash == 5.0 || cash == 10.0 || cash == 20.0)) {
-                            totalCash += cash;
-                            logger.write("MONEY FED: " + "$" + cash + " " + "CURRENT BALANCE " + "$" + totalCash);
-                            UserOutput.displayMessage("Your current cash is: " + totalCash);
-
+                        if (cash == 1.0 || cash == 5.0 || cash == 10.0 || cash == 20.0) {
+                            funds.setTotalCash(funds.getTotalCash() + cash);
+                            logger.write("MONEY FED: " + "$" + cash + " " + "CURRENT BALANCE " + "$" + funds.getTotalCash());
+                            UserOutput.displayMessage("Your current cash is: " + funds.getTotalCash());
                         } else {
-                            UserOutput.displayMessage("Please insert bills only at a time (ex. $1, $5, $10, or $20)");
+                            UserOutput.displayMessage("Please only insert whole bills (ex. $1, $5, $10, or $20)");
                             continue;
                         }
                     } catch (Exception e) {
                         UserOutput.displayMessage("Sorry, please insert cash");
                         continue;
                     }
+
                     UserOutput.displayMessage("Are you finished inserting money? (Y/N)");
-                    boolean waitForYesOrNo = true;
-
-
                     String yesOrNo = userInputScan.nextLine().toUpperCase();
                     if (yesOrNo.equals("Y")) {
-                        UserOutput.displayMessage("Your total cash is: " + totalCash);
+                        UserOutput.displayMessage("Your total cash is: " + funds.getTotalCash());
                         waitForMoney = false;
                     } else if (!yesOrNo.equals("N")) {
                         UserOutput.displayMessage("Sorry, incorrect response!");
                     }
-
-
                 }
             } else if (choice.equals("Select Item")) {
                 UserOutput.displayStock();
@@ -143,60 +135,40 @@ public class VendingMachine {
                 if (itemLocations.contains(itemSelected)) {
                     for (int i = 0; i < stockItems.size(); i++) {
                         String stockLocation = stockItems.get(i).getLocation();
-                        int stockQty = stockItems.get(i).getStockQty();
                         Item currentItem = stockItems.get(i);
-                        if (itemSelected.equals(stockLocation) && stockQty > 0 && totalCash >= currentItem.getPrice()) {
+                        if (itemSelected.equals(stockLocation) && inStock(currentItem) && funds.getTotalCash() >= currentItem.getPrice()) {
                             UserOutput.displayMessage("Thanks for choosing " + currentItem.getItemName());
                             UserOutput.displayMessage(currentItem.getMessage());
-                            double remainingCash = currentItem.purchase(totalCash, purchaseCounter);
+                            double remainingCash = currentItem.purchase(funds.getTotalCash(), purchaseCounter);
                             purchaseCounter++;
-                            logger.write(currentItem.getItemName() + " " + itemSelected + " " + "CURRENT BALANCE: " + "$" + totalCash + " " + "REMAINING BALANCE: " + "$" + remainingCash);
-                            totalCash = remainingCash;
+                            logger.write(currentItem.getItemName() + " " + itemSelected + " " + "CURRENT BALANCE: " + "$" + funds.getTotalCash() + " " + "REMAINING BALANCE: " + "$" + remainingCash);
+                            funds.setTotalCash(remainingCash);
                             System.out.println(currentItem.getStockQty());
-
-                            UserOutput.displayMessage("You now have " + totalCash);
-                        } else if (itemSelected.equals(stockLocation) && stockQty == 0) {
+                            UserOutput.displayMessage("You now have " + funds.getTotalCash());
+                        } else if (itemSelected.equals(stockLocation) && !inStock(currentItem)) {
                             UserOutput.displayMessage("Your selected item is no longer available");
                             break;
-                        } else if (totalCash < currentItem.getPrice()) {
+                        } else if (funds.getTotalCash() < currentItem.getPrice()) {
                             UserOutput.displayMessage("Sorry, you need to insert cash first!");
                             break;
                         }
-
                     }
                 } else {
                     UserOutput.displayMessage("Sorry, please select item from the list(e.g. A1)");
                 }
-
-
             } else if (choice.equals("Finish")) {
-                UserOutput.displayMessage(change(totalCash));
-                totalCash = 0;
+                UserOutput.displayMessage(funds.change(funds.getTotalCash()));
+                funds.setTotalCash(0);
                 break;
             } else {
                 UserOutput.displayMessage("Sorry, please select M, S, or F");
             }
-
         }
-
     }
 
-    public static String change(double finalChange) {
-        double change = finalChange * 100;
-        int dollars = (int) (change / 100);
-        change = change % 100;
-        int quarters = (int) (change / 25);
-        change = change % 25;
-        int dimes = (int) (change / 10);
-        change = change % 10;
-        int nickels = (int) (change / 5);
-
-        double backToZero = 0;
-
-        logger.write("CHANGE GIVEN: " + "$" + finalChange + " " + "$" + backToZero);
-
-        return "Your change is " + dollars + " dollar(s), " + quarters + " quarter(s), " + dimes + " dime(s), and " + nickels + " nickel(s).";
-
+    public static boolean inStock(Item item) {
+        return item.getStockQty() > 0;
     }
+
 }
 

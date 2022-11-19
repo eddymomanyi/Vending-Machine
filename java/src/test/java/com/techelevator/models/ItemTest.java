@@ -1,5 +1,6 @@
 package com.techelevator.models;
 
+import com.techelevator.application.VendingMachine;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,6 +58,22 @@ public class ItemTest {
 
         assertEquals(expectedResult, actualResult);
 
+    }
+
+    @Test
+    public void inStock_returns_true_for_stock_above_0(){
+        sampleItem.setStockQty(5);
+      //  boolean expectedResult = true;
+        boolean actualResult = VendingMachine.inStock(sampleItem);
+        Assert.assertTrue(actualResult);
+    }
+
+    @Test
+    public void inStock_returns_false_for_stock_at_0(){
+        sampleItem.setStockQty(0);
+        //  boolean expectedResult = false;
+        boolean actualResult = VendingMachine.inStock(sampleItem);
+        Assert.assertFalse(actualResult);
     }
 
 }

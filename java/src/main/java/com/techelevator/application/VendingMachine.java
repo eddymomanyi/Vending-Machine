@@ -165,11 +165,12 @@ public class VendingMachine {
                             // updates funds after transaction
                             funds.setTotalCash(remainingCash);
                             UserOutput.displayMessage("You now have " + String.format("%.2f", funds.getTotalCash())); // from stackoverflow, used to show cash to two decimal places
+
                             // catch for if the item is out of stock
                         } else if (itemSelected.equals(stockLocation) && !inStock(currentItem)) {
                             UserOutput.displayMessage("Your selected item is no longer available");
                             break;
-                        } else if (funds.getTotalCash() < currentItem.getPrice()) {
+                        } else if (itemSelected.equals(stockLocation) && funds.getTotalCash() < currentItem.getPrice()) {
                             UserOutput.displayMessage("Sorry, you need to insert cash first!");
                             break;
                         }
